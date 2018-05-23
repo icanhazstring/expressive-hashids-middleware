@@ -19,3 +19,4 @@ script:
   - composer cs
   - composer stan
   - composer test -- --coverage-clover=build/logs/clover.xml --coverage-text
+  - 'if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./vendor/bin/test-reporter; fi'
