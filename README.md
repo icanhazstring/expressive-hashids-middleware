@@ -76,11 +76,19 @@ To use the strategy, simply use the provided delegator `HashidsHydratorDelegator
 it as delegator for your hydrator.
 
 ```php
-[
-    'delegators' => [
-        'ArraySerializable::class' => [
-            \icanhazstring\Hashids\Hydrator\HashidsHydratorDelegatorFactory:class
-        ]
-    ]
-]
+class ConfigProvider
+{
+    public function __invoke(): array
+    {
+        return [
+            'hydrators' => [
+                'delegators' => [
+                    ArraySerializable::class => [
+                        \icanhazstring\Hashids\Hydrator\HashidsHydratorDelegatorFactory:class
+                    ]
+                ]
+            ],
+        ];
+    }
+}
 ```
