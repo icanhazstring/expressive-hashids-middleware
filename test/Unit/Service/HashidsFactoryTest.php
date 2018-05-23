@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace icanhaztests\Middleware\Unit\Service;
+namespace icanhaztests\Hashids\Unit\Service;
 
 use Hashids\HashidsInterface;
+use icanhazstring\Hashids\HashidsConfigProvider;
 use icanhazstring\Middleware\Exception\InvalidConfigException;
-use icanhazstring\Middleware\Service\HashidsFactory;
+use icanhazstring\Hashids\Service\HashidsFactory;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
-use Zend\Diactoros\ServerRequest;
 
 /**
  * @package icanhaztests\Middleware\Unit\Service
@@ -37,9 +37,9 @@ class HashidsFactoryTest extends TestCase
     {
         $container = $this->prophesize(ContainerInterface::class);
         $container->get('config')->shouldBeCalled()->willReturn([
-            HashidsFactory::CONFIG_KEY => [
+            HashidsConfigProvider::CONFIG_KEY => [
                 'salt' => '',
-                'minHashLength' => 0,
+                'min_hash_length' => 0,
                 'alphabet' => 'abcdefghijklmnopqrstuvwxyz'
             ]
         ]);

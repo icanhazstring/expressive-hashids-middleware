@@ -1,11 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace icanhazstring\Middleware;
+namespace icanhazstring\Hashids\Middleware;
 
 use Hashids\HashidsInterface;
 use icanhazstring\Middleware\Exception\InvalidConfigException;
 use icanhazstring\Middleware\Exception\MissingDependencyException;
+use icanhazstring\Hashids\HashidsConfigProvider;
 use Psr\Container\ContainerInterface;
 use function is_null;
 use function sprintf;
@@ -16,8 +17,6 @@ use function sprintf;
  */
 class HashidsMiddlewareFactory
 {
-    public const CONFIG_KEY = 'hashids_middleware';
-
     /**
      * @param ContainerInterface $container
      *
@@ -33,16 +32,16 @@ class HashidsMiddlewareFactory
             ));
         }
 
-        $config = $container->get('config')[self::CONFIG_KEY] ?? null;
+        $config = $container->get('config')[HashidsConfigProvider::CONFIG_KEY] ?? null;
 
         if (is_null($config)) {
             throw new InvalidConfigException(sprintf(
                 'Missing %s config for %s service',
-                self::CONFIG_KEY,
+                HashidsConfigProvider::CONFIG_KEY,
                 HashidsMiddleware::class
             ));
         }
 
-        return new HashidsMiddleware($container->get(HashidsInterface::class), $config['attributes']);
+        return new HashidsMiddleware($container->get(HashidsInterface::class), $config['resource_identifier']);
     }
 }

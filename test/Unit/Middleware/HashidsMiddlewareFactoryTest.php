@@ -1,13 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace icanhaztests\Middleware\Unit;
+namespace icanhaztests\Hashids\Unit\Middleware;
 
 use Hashids\HashidsInterface;
-use icanhazstring\Middleware\HashidsMiddleware;
-use icanhazstring\Middleware\HashidsMiddlewareFactory;
+use icanhazstring\Hashids\Middleware\HashidsMiddleware;
+use icanhazstring\Hashids\Middleware\HashidsMiddlewareFactory;
 use icanhazstring\Middleware\Exception\InvalidConfigException;
 use icanhazstring\Middleware\Exception\MissingDependencyException;
+use icanhazstring\Hashids\HashidsConfigProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
@@ -55,7 +56,7 @@ class HashidsMiddlewareFactoryTest extends TestCase
         $container->has(HashidsInterface::class)->shouldBeCalled()->willReturn(true);
         $container->get(HashidsInterface::class)->shouldBeCalled()->willReturn($hashidsService->reveal());
         $container->get('config')->shouldBeCalled()->willReturn([
-            HashidsMiddlewareFactory::CONFIG_KEY => ['attributes' => ['id']]
+            HashidsConfigProvider::CONFIG_KEY => ['resource_identifier' => 'id']
         ]);
 
         $factory = new HashidsMiddlewareFactory();

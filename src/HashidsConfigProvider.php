@@ -1,17 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace icanhazstring\Middleware;
+namespace icanhazstring\Hashids;
 
 use Hashids\HashidsInterface;
-use icanhazstring\Middleware\Service\HashidsFactory;
 
 /**
- * @package icanhazstring\Middleware
+ * @package icanhazstring\Hashids
  * @author  icanhazstring <blubb0r05+github@gmail.com>
  */
 class HashidsConfigProvider
 {
+    public const CONFIG_KEY = 'hashids_config';
+
     /**
      * @return array
      */
@@ -19,8 +20,7 @@ class HashidsConfigProvider
     {
         return [
             'dependencies' => $this->getDependencies(),
-            HashidsFactory::CONFIG_KEY => $this->getHashidsConfig(),
-            HashidsMiddlewareFactory::CONFIG_KEY => $this->getMiddlewareConfig()
+            self::CONFIG_KEY => $this->getConfig()
         ];
     }
 
@@ -31,8 +31,9 @@ class HashidsConfigProvider
     {
         return [
             'factories' => [
-                HashidsInterface::class => HashidsFactory::class,
-                HashidsMiddleware::class => HashidsMiddlewareFactory::class
+                HashidsInterface::class => Service\HashidsFactory::class,
+                Hydrator\HashidsStrategy::class => Hydrator\HashidsStrategyFactory::class,
+                Middleware\HashidsMiddleware::class => Middleware\HashidsMiddlewareFactory::class
             ]
         ];
     }
@@ -40,22 +41,13 @@ class HashidsConfigProvider
     /**
      * @return array
      */
-    public function getHashidsConfig(): array
+    public function getConfig(): array
     {
         return [
             'salt' => '',
-            'minHashLength' => 0,
+            'min_hash_length' => 0,
             'alphabet' => 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890',
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function getMiddlewareConfig(): array
-    {
-        return [
-            'attributes' => ['id']
+            'resource_identifier' => 'id'
         ];
     }
 }
